@@ -1,6 +1,17 @@
-import networkx as nx
+def matriz_a_grafo(laberinto):
+    grafo = {}
+    for i in range(len(laberinto)):
+        for j in range(len(laberinto[0])):
+            if laberinto[i][j] != 0:
+                vecinos = []
+                # Verificar celdas adyacentes
+                for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                    ni, nj = i + dx, j + dy
+                    if 0 <= ni < len(laberinto) and 0 <= nj < len(laberinto[0]) and laberinto[ni][nj] != 0:
+                        vecinos.append((ni, nj))
+                grafo[(i, j)] = vecinos
+    return grafo
 
-# Definir el laberinto
 Laberinto = [
     [2, 1, 1, 1, 0, 0, 1, 1, 1, 1],
     [0, 0, 0, 1, 1, 1, 0, 0, 1, 0],
@@ -14,24 +25,11 @@ Laberinto = [
     [1, 0, 1, 0, 1, 0, 1, 1, 1, 1]
 ]
 
-# Crear un grafo dirigido
-GrafoLaberinto = nx.Graph()
+grafo = matriz_a_grafo(Laberinto)
 
-# Agregar nodos al grafo
-for i in range(len(Laberinto)):
-    for j in range(len(Laberinto[i])):
-        if Laberinto[i][j] != 0:
-            GrafoLaberinto.add_node((i, j))
+def imprimir_grafo(grafo):
+    for nodo, vecinos in grafo.items():
+        print(f"Nodo {nodo}: Vecinos {vecinos}")
 
-# Agregar aristas al grafo
-for i in range(len(Laberinto)):
-    for j in range(len(Laberinto[i])):
-        if Laberinto[i][j] != 0:
-            # Verificar celdas adyacentes
-            for dx, dy in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-                ni, nj = i + dx, j + dy
-                if 0 <= ni < len(Laberinto) and 0 <= nj < len(Laberinto[i]) and Laberinto[ni][nj] != 0:
-                    GrafoLaberinto.add_edge((i, j), (ni, nj))
-
-# Dibujar el grafo
-nx.draw(GrafoLaberinto, with_labels=True)
+# Utilizamos la función para imprimir el grafo generado
+imprimir_grafo(grafo)
